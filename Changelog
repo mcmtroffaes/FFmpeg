@@ -125,6 +125,7 @@ version 4.0:
 - segafilm muxer
 - vfrdet filter
 - SRCNN filter
+- skipblend video filter
 
 
 version 3.4:

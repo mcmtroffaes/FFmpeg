@@ -372,6 +372,14 @@ FATE_FILTER_VSYNTH-$(CONFIG_SWAPRECT_FILTER) += $(FATE_SWAPRECT)
 FATE_FILTER_VSYNTH-$(CONFIG_TBLEND_FILTER) += fate-filter-tblend
 fate-filter-tblend: CMD = framecrc -c:v pgmyuv -i $(SRC) -vf tblend=all_mode=difference128
 
+FATE_SKIPBLEND += fate-filter-skipblend-gray-1
+fate-filter-skipblend-gray-1: CMD = framecrc -c:v pgmyuv -i $(SRC) -vf skipblend=step=6:blend=1
+
+FATE_SKIPBLEND += fate-filter-skipblend-gray-2
+fate-filter-skipblend-gray-2: CMD = framecrc -c:v pgmyuv -i $(SRC) -vf skipblend=step=6:blend=3
+
+FATE_FILTER_VSYNTH-$(CONFIG_SKIPBLEND_FILTER) += $(FATE_SKIPBLEND)
+
 FATE_FILTER_VSYNTH-$(CONFIG_TELECINE_FILTER) += fate-filter-telecine
 fate-filter-telecine: CMD = framecrc -c:v pgmyuv -i $(SRC) -vf telecine
 
@@ -446,6 +454,10 @@ FATE_FILTER_SAMPLES-$(call ALLYES, MOV_DEMUXER FPS_FILTER QTRLE_DECODER) += fate
 fate-filter-fps-cfr: CMD = framecrc -i $(TARGET_SAMPLES)/qtrle/apple-animation-variable-fps-bug.mov -r 30 -vsync cfr -pix_fmt yuv420p
 fate-filter-fps-r:   CMD = framecrc -i $(TARGET_SAMPLES)/qtrle/apple-animation-variable-fps-bug.mov -r 30 -vf fps -pix_fmt yuv420p
 fate-filter-fps:     CMD = framecrc -i $(TARGET_SAMPLES)/qtrle/apple-animation-variable-fps-bug.mov -vf fps=30 -pix_fmt yuv420p
+
+FATE_FILTER_SAMPLES-$(call ALLYES, SKIPBLEND_FILTER) += fate-filter-skipblend-anim-1 fate-filter-skipblend-anim-2
+fate-filter-skipblend-anim-1: CMD = framecrc -i $(TARGET_SAMPLES)/filter/anim.mkv -vf skipblend=step=6:blend=1
+fate-filter-skipblend-anim-2: CMD = framecrc -i $(TARGET_SAMPLES)/filter/anim.mkv -vf skipblend=step=6:blend=3
 
 FATE_FILTER_VSYNTH-$(call ALLYES, FORMAT_FILTER SPLIT_FILTER ALPHAEXTRACT_FILTER ALPHAMERGE_FILTER) += fate-filter-alphaextract_alphamerge_rgb
 fate-filter-alphaextract_alphamerge_rgb: tests/data/filtergraphs/alphamerge_alphaextract_rgb

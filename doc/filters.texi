@@ -5966,6 +5966,7 @@ The threshold below which a pixel value is considered black; it defaults to
 
 @end table
 
+@anchor{tblend}
 @section blend, tblend
 
 Blend two video frames into each other.
@@ -5977,6 +5978,8 @@ stream, the first input is the "top" layer and second input is
 The @code{tblend} (time blend) filter takes two consecutive frames
 from one single stream, and outputs the result obtained by blending
 the new frame on top of the old frame.
+See @ref{skipblend} for blending more than two frames at once
+from the same stream.
 
 A description of the accepted options follows.
 
@@ -10224,9 +10227,11 @@ This flag is enabled by default.
 @end table
 @end table
 
+@anchor{framestep}
 @section framestep
 
 Select one frame every N-th frame.
+See @ref{skipblend} for blending skipped frames.
 
 This filter accepts the following option:
 @table @option
@@ -15948,6 +15953,31 @@ ffmpeg -i input1.mkv -i input2.mkv -filter_complex "[0:v][1:v] signature=nb_inpu
 @end example
 
 @end itemize
+
+@anchor{skipblend}
+@section skipblend
+
+Skip frames whilst blending skipped frames, for a motion blur
+effect. The number of frames that are blended (i.e. the exposure time,
+in frames) can be controlled, allowing control over the strength of the
+motion blur.
+See @ref{framestep} for skipping frames without blending.
+See @ref{tblend} for blending consecutive frames without skipping.
+
+This filter accepts the following options:
+@table @option
+@item step
+Skip @code{step} frames each step.
+Allowed values are positive integers between @code{1} and @code{65535}.
+Default value is @code{1}.
+@item blend
+Blend the first @code{blend} frames on every step,
+to produce a motion blur effect.
+Allowed values are positive integers between @code{1} and @code{step},
+where @code{1} corresponds to no motion blur, and @code{step}
+corresponds to maximal motion blur.
+Default value is @code{step}.
+@end table
 
 @anchor{smartblur}
 @section smartblur
